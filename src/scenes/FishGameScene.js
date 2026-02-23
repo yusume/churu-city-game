@@ -4,14 +4,15 @@ import gameState from '../utils/GameState';
 export default class FishGameScene extends Phaser.Scene {
   constructor() {
     super('FishGameScene');
-    this.score = 0;
-    this.gainedCoins = 0;
-    this.timeLeft = 60;
-    this.items = null;
-    this.ended = false;
   }
 
   create() {
+    this.score = 0;
+    this.gainedCoins = 0;
+    this.timeLeft = 60;
+    this.items = this.physics.add.group();
+    this.ended = false;
+
     this.cameras.main.setBackgroundColor('#e6f6ff');
 
     if (!gameState.consumeStamina(this, 1)) {
@@ -28,8 +29,6 @@ export default class FishGameScene extends Phaser.Scene {
     this.scoreText = this.add.text(20, 86, '점수: 0', { fontSize: '22px', color: '#143648' });
     this.coinText = this.add.text(20, 118, '획득 코인: 0', { fontSize: '22px', color: '#143648' });
     this.timerText = this.add.text(20, 150, '남은 시간: 60', { fontSize: '22px', color: '#143648' });
-
-    this.items = this.physics.add.group();
 
     this.spawnTimer = this.time.addEvent({
       delay: 550,
@@ -49,6 +48,8 @@ export default class FishGameScene extends Phaser.Scene {
         }
       },
     });
+
+    this.events.once('shutdown', this.cleanupTimers, this);
   }
 
   spawnItem() {
@@ -89,13 +90,22 @@ export default class FishGameScene extends Phaser.Scene {
     });
   }
 
+  cleanupTimers() {
+    if (this.spawnTimer) {
+      this.spawnTimer.remove(false);
+      this.spawnTimer = null;
+    }
+    if (this.countdown) {
+      this.countdown.remove(false);
+      this.countdown = null;
+    }
+  }
+
   endGame() {
     if (this.ended) return;
     this.ended = true;
 
-    this.spawnTimer.remove(false);
-    this.countdown.remove(false);
-
+    this.cleanupTimers();
     this.items.getChildren().forEach((item) => item.destroy());
 
     if (this.gainedCoins > 0) {

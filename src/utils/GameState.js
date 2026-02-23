@@ -22,6 +22,9 @@ class GameState {
   constructor() {
     this.state = this._loadFromStorage();
     this._timersStarted = false;
+    this._game = null;
+    this._staminaTimer = null;
+    this._moodTimer = null;
   }
 
   initRegistry(scene) {
@@ -40,6 +43,20 @@ class GameState {
     scene.registry.set(key, value);
     this._save();
     scene.game.events.emit('state:changed', { key, value, snapshot: { ...this.state } });
+  }
+
+  getActiveScene() {
+    if (!this._game) return null;
+    const activeScenes = this._game.scene.getScenes(true);
+    if (!activeScenes.length) return null;
+
+    return activeScenes.find((s) => s.scene.key === 'HomeScene') || activeScenes[0];
+  }
+
+  setWithActiveScene(key, value) {
+    const activeScene = this.getActiveScene();
+    if (!activeScene) return;
+    this.set(activeScene, key, value);
   }
 
   addCoins(scene, delta) {
@@ -90,19 +107,35 @@ class GameState {
   startGlobalTimers(scene) {
     if (this._timersStarted) return;
     this._timersStarted = true;
+    this._game = scene.game;
 
-    // stamina +1 per 5 minutes
-    scene.time.addEvent({
+    this._staminaTimer = scene.time.addEvent({
       delay: 5 * 60 * 1000,
       loop: true,
-      callback: () => this.recoverStamina(scene, 1),
+      callback: () => {
+        const activeScene = this.getActiveScene();
+        if (!activeScene) return;
+        const next = clamp(this.get(activeScene, 'stamina') + 1, 0, 10);
+        this.setWithActiveScene('stamina', next);
+      },
     });
 
-    // mood -1 per 2 minutes
-    scene.time.addEvent({
+    this._moodTimer = scene.time.addEvent({
       delay: 2 * 60 * 1000,
       loop: true,
-      callback: () => this.adjustMood(scene, -1),
+      callback: () => {
+        const activeScene = this.getActiveScene();
+        if (!activeScene) return;
+        const nextMood = clamp(this.get(activeScene, 'catMood') - 1, 0, 100);
+        this.setWithActiveScene('catMood', nextMood);
+
+        if (nextMood <= 0) {
+          const nextCoins = Math.max(0, this.get(activeScene, 'coins') - 100);
+          this.setWithActiveScene('coins', nextCoins);
+          this.setWithActiveScene('catMood', 30);
+          this._game.events.emit('game:alert', '⚠️ 스트레스성 병동 입원! 츄르값 100 차감');
+        }
+      },
     });
   }
 

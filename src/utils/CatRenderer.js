@@ -8,9 +8,10 @@ export function createCatContainer(scene, x, y, equipped, scale = 1) {
   LAYER_ORDER.forEach((layer) => {
     const textureKey = equipped[layer];
     if (!textureKey || !scene.textures.exists(textureKey)) return;
-    container.add(scene.add.image(0, 0, textureKey).setOrigin(0.5).setScale(scale));
+    container.add(scene.add.image(0, 0, textureKey).setOrigin(0.5));
   });
 
+  container.setScale(scale);
   return container;
 }
 

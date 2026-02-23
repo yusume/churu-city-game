@@ -1,6 +1,28 @@
 import Phaser from 'phaser';
 import gameState from '../utils/GameState';
 
+const OUTCOMES = [
+  { mult: 0, weight: 30 },
+  { mult: 1, weight: 35 },
+  { mult: 2, weight: 20 },
+  { mult: 3, weight: 12 },
+  { mult: 5, weight: 3 },
+];
+
+function pickWeightedOutcome() {
+  const total = OUTCOMES.reduce((sum, o) => sum + o.weight, 0);
+  let roll = Math.random() * total;
+
+  for (const outcome of OUTCOMES) {
+    roll -= outcome.weight;
+    if (roll <= 0) {
+      return outcome.mult;
+    }
+  }
+
+  return OUTCOMES[OUTCOMES.length - 1].mult;
+}
+
 export default class SlotGameScene extends Phaser.Scene {
   constructor() {
     super('SlotGameScene');
@@ -20,11 +42,11 @@ export default class SlotGameScene extends Phaser.Scene {
         this.result.setText('코인이 부족합니다 😿');
         return;
       }
-      const multipliers = [0, 1, 2, 3, 5];
-      const m = Phaser.Utils.Array.GetRandom(multipliers);
-      const reward = 10 * m;
+
+      const multiplier = pickWeightedOutcome();
+      const reward = 10 * multiplier;
       gameState.addCoins(this, reward);
-      this.result.setText(`배율 x${m}!\n보상 코인 +${reward}`);
+      this.result.setText(`배율 x${multiplier}!\n보상 코인 +${reward}`);
     });
 
     const back = this.add.rectangle(195, 800, 170, 50, 0xaed6ff).setStrokeStyle(2, 0x2d2d2d).setInteractive({ useHandCursor: true });
@@ -32,3 +54,5 @@ export default class SlotGameScene extends Phaser.Scene {
     back.on('pointerdown', () => this.scene.start('GameSelectScene'));
   }
 }
+
+export { OUTCOMES, pickWeightedOutcome };

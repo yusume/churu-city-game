@@ -4,11 +4,12 @@ import gameState from '../utils/GameState';
 export default class RatGameScene extends Phaser.Scene {
   constructor() {
     super('RatGameScene');
-    this.kills = 0;
-    this.timeLeft = 20;
   }
 
   create() {
+    this.kills = 0;
+    this.timeLeft = 20;
+
     this.cameras.main.setBackgroundColor('#fff3f3');
 
     if (!gameState.consumeStamina(this, 1)) {
@@ -33,12 +34,26 @@ export default class RatGameScene extends Phaser.Scene {
         this.timeLeft -= 1;
         this.refresh();
         if (this.timeLeft <= 0) {
-          const reward = this.kills * 3;
-          gameState.addCoins(this, reward);
-          this.scene.start('GameSelectScene');
+          this.endGame();
         }
       },
     });
+
+    this.events.once('shutdown', this.cleanup, this);
+  }
+
+  cleanup() {
+    if (this.timer) {
+      this.timer.remove(false);
+      this.timer = null;
+    }
+  }
+
+  endGame() {
+    this.cleanup();
+    const reward = this.kills * 3;
+    gameState.addCoins(this, reward);
+    this.scene.start('GameSelectScene');
   }
 
   refresh() {
