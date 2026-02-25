@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import PreloadScene from './scenes/PreloadScene';
+import TitleScene from './scenes/TitleScene';
 import HomeScene from './scenes/HomeScene';
 import GameSelectScene from './scenes/GameSelectScene';
 import FishGameScene from './scenes/FishGameScene';
@@ -28,6 +29,7 @@ const config = {
   },
   scene: [
     PreloadScene,
+    TitleScene,
     HomeScene,
     GameSelectScene,
     FishGameScene,

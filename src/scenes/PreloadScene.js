@@ -16,8 +16,8 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    gameState.initRegistry(this);
+   gameState.initRegistry(this);
     createPlaceholderTextures(this);
-    this.scene.start('HomeScene');
+    this.scene.start('TitleScene');
   }
 }
