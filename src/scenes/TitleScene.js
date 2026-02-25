@@ -57,14 +57,15 @@ export default class TitleScene extends Phaser.Scene {
       
       this.cameras.main.fadeOut(400, 255, 255, 255);
       this.cameras.main.once('camerafadeoutcomplete', () => {
-        import('../utils/GameState').then(({ default: gameState }) => {
-          // 이름이 없으면 가입 화면, 있으면 홈 화면
-          if (!gameState.get(this, 'butlerName')) {
-            this.scene.start('SetupScene');
-          } else {
-            this.scene.start('HomeScene');
-          }
-        });
+        // import('../utils/GameState').then(({ default: gameState }) => {
+        //   // 이름이 없으면 가입 화면, 있으면 홈 화면
+        //   if (!gameState.get(this, 'butlerName')) {
+        //     this.scene.start('SetupScene');
+        //   } else {
+        //     this.scene.start('HomeScene');
+        //   }
+        // });
+        this.scene.start('SetupScene');
       });
     });
     
