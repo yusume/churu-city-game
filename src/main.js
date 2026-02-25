@@ -7,6 +7,7 @@ import FishGameScene from './scenes/FishGameScene';
 import SlotGameScene from './scenes/SlotGameScene';
 import RatGameScene from './scenes/RatGameScene';
 import DressRoomScene from './scenes/DressRoomScene';
+import SetupScene from './scenes/SetupScene';
 
 const config = {
   type: Phaser.AUTO,
@@ -30,6 +31,7 @@ const config = {
   scene: [
     PreloadScene,
     TitleScene,
+    SetupScene,
     HomeScene,
     GameSelectScene,
     FishGameScene,
