@@ -8,6 +8,8 @@ import SlotGameScene from './scenes/SlotGameScene';
 import RatGameScene from './scenes/RatGameScene';
 import DressRoomScene from './scenes/DressRoomScene';
 import SetupScene from './scenes/SetupScene';
+import KeyboardGameScene from './scenes/KeyboardGameScene';
+import ChuruSqueezeGameScene from './scenes/ChuruSqueezeGameScene';
 
 const config = {
   type: Phaser.AUTO,
@@ -37,6 +39,8 @@ const config = {
     FishGameScene,
     SlotGameScene,
     RatGameScene,
+    KeyboardGameScene,
+    ChuruSqueezeGameScene,
     DressRoomScene,
   ],
 };
