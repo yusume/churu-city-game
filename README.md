@@ -36,6 +36,8 @@ churu-and-the-city/
 │       ├── FishGameScene.js     # 🐟 생선 세금 징수 (메인 미니게임)
 │       ├── SlotGameScene.js     # 🎰 츄르 복권
 │       ├── RatGameScene.js      # 🐀 쥐 단속
+│       ├── KeyboardGameScene.js # 🛡️ 키보드 방어전
+│       ├── ChuruSqueezeGameScene.js # 👆 츄르 짜기
 │       └── DressRoomScene.js    # 👗 드레스룸
 └── public/
     └── assets/                  # PNG 에셋 폴더 (아래 참조)
@@ -61,6 +63,8 @@ churu-and-the-city/
 | 🐟 생선 세금 징수 | 체력 1 | 생선 1마리당 코인 +2 |
 | 🎰 츄르 복권 | 코인 10 | 배율에 따라 코인 획득 |
 | 🐀 쥐 단속 | 체력 1 | 쥐 1마리당 코인 +3 |
+| 🛡️ 키보드 방어전 | 체력 1 | 발바닥 처치 점수만큼 코인 획득 |
+| 👆 츄르 짜기 | 체력 1 | 스와이프 횟수의 절반 코인 획득 |
 
 ---
 
