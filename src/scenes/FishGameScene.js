@@ -26,6 +26,16 @@ export default class FishGameScene extends Phaser.Scene {
       color: '#14425e',
     }).setOrigin(0.5);
 
+    const quitBtn = this.add.rectangle(320, 38, 120, 42, 0xffb3b3, 1)
+      .setStrokeStyle(2, 0x222222)
+      .setInteractive({ useHandCursor: true });
+    this.add.text(320, 38, '게임 종료', {
+      fontSize: '18px',
+      color: '#222222',
+      fontStyle: 'bold',
+    }).setOrigin(0.5);
+    quitBtn.on('pointerdown', () => this.quitGame());
+
     this.scoreText = this.add.text(20, 86, '점수: 0', { fontSize: '22px', color: '#143648' });
     this.coinText = this.add.text(20, 118, '획득 코인: 0', { fontSize: '22px', color: '#143648' });
     this.timerText = this.add.text(20, 150, '남은 시간: 60', { fontSize: '22px', color: '#143648' });
@@ -141,5 +151,13 @@ export default class FishGameScene extends Phaser.Scene {
       overlay.destroy();
       this.scene.start('HomeScene');
     });
+  }
+
+  quitGame() {
+    if (this.ended) return;
+    this.ended = true;
+    this.cleanupTimers();
+    this.items.getChildren().forEach((item) => item.destroy());
+    this.scene.start('GameSelectScene');
   }
 }
