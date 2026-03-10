@@ -78,9 +78,9 @@ export default class ChuruSqueezeGameScene extends Phaser.Scene {
       },
     });
 
-    const back = this.add.rectangle(195, 800, 170, 50, 0xaed6ff).setStrokeStyle(2, 0x2d2d2d).setInteractive({ useHandCursor: true });
-    this.add.text(195, 800, '뒤로', { fontSize: '22px', color: '#1f1f1f' }).setOrigin(0.5);
-    back.on('pointerdown', () => this.scene.start('GameSelectScene'));
+    const quit = this.add.rectangle(320, 70, 120, 42, 0xffb3b3).setStrokeStyle(2, 0x2d2d2d).setInteractive({ useHandCursor: true });
+    this.add.text(320, 70, '게임 종료', { fontSize: '18px', color: '#2d2d2d', fontStyle: 'bold' }).setOrigin(0.5);
+    quit.on('pointerdown', () => this.quitGame());
 
     this.events.once('shutdown', this.cleanup, this);
   }
@@ -94,6 +94,13 @@ export default class ChuruSqueezeGameScene extends Phaser.Scene {
       this.countdown.remove(false);
       this.countdown = null;
     }
+  }
+
+  quitGame() {
+    if (this.isGameOver) return;
+    this.isGameOver = true;
+    this.cleanup();
+    this.scene.start('GameSelectScene');
   }
 
   endGame() {

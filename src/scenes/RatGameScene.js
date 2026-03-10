@@ -9,6 +9,7 @@ export default class RatGameScene extends Phaser.Scene {
   create() {
     this.kills = 0;
     this.timeLeft = 20;
+    this.ended = false;
 
     this.cameras.main.setBackgroundColor('#fff3f3');
 
@@ -18,6 +19,10 @@ export default class RatGameScene extends Phaser.Scene {
     }
 
     this.add.text(195, 70, '쥐 단속 🐀', { fontSize: '34px', color: '#7a2f2f', fontStyle: 'bold' }).setOrigin(0.5);
+    const quit = this.add.rectangle(320, 70, 120, 42, 0xffb3b3).setStrokeStyle(2, 0x2d2d2d).setInteractive({ useHandCursor: true });
+    this.add.text(320, 70, '게임 종료', { fontSize: '18px', color: '#2d2d2d', fontStyle: 'bold' }).setOrigin(0.5);
+    quit.on('pointerdown', () => this.quitGame());
+
     this.hud = this.add.text(195, 120, '처치: 0 | 남은시간: 20', { fontSize: '22px', color: '#333' }).setOrigin(0.5);
 
     this.rat = this.add.image(195, 420, 'item_rat').setScale(2).setInteractive({ useHandCursor: true });
@@ -50,6 +55,8 @@ export default class RatGameScene extends Phaser.Scene {
   }
 
   endGame() {
+    if (this.ended) return;
+    this.ended = true;
     this.cleanup();
     const reward = this.kills * 3;
     gameState.addCoins(this, reward);
@@ -58,5 +65,12 @@ export default class RatGameScene extends Phaser.Scene {
 
   refresh() {
     this.hud.setText(`처치: ${this.kills} | 남은시간: ${this.timeLeft}`);
+  }
+
+  quitGame() {
+    if (this.ended) return;
+    this.ended = true;
+    this.cleanup();
+    this.scene.start('GameSelectScene');
   }
 }

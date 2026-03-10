@@ -32,6 +32,10 @@ export default class SlotGameScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor('#f5f1ff');
     this.add.text(195, 70, '츄르 복권 🎰', { fontSize: '34px', color: '#3d2f7a', fontStyle: 'bold' }).setOrigin(0.5);
 
+    const quit = this.add.rectangle(320, 70, 120, 42, 0xffb3b3).setStrokeStyle(2, 0x2d2d2d).setInteractive({ useHandCursor: true });
+    this.add.text(320, 70, '게임 종료', { fontSize: '18px', color: '#2d2d2d', fontStyle: 'bold' }).setOrigin(0.5);
+    quit.on('pointerdown', () => this.scene.start('GameSelectScene'));
+
     this.result = this.add.text(195, 350, '코인 10을 내고 레버를 당기세요!', { fontSize: '22px', color: '#2d2d2d', align: 'center' }).setOrigin(0.5);
 
     const spinBtn = this.add.rectangle(195, 430, 220, 60, 0xffdf71).setStrokeStyle(2, 0x2d2d2d).setInteractive({ useHandCursor: true });
